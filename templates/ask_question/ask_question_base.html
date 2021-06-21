@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block content %}
+  <header class="masthead">
+    <div class="container">
+      <ul style="color:white" class="nav navbar-dark bg-dark justify-content-center">
+          <li class="nav-item">
+            <a id="recently_asked" type="button" class="nav-link menuname" >Recent</a>
+          </li>
+          <li class="nav-item">
+            <a  type="button" class="nav-link menuname" href="{% url 'ask_questions:ask' %}" >
+              <span style="color: white;">New</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a id="my_asked" data-catid="{{request.user.id}}" type="button" class="nav-link menuname" >My questions</a>
+          </li>
+          <li class="nav-item">
+              <a id="my_answers" data-catid="{{request.user.id}}" type="button" class="nav-link menuname" >My answers</a>
+            </li>
+        </ul>
+    </div>
+</header>
+<br>
+
+{% block askcontent %}
+{% endblock %}
+<input type="hidden" class="csrf_value" value="{{csrf_token}}">
+{% endblock %}
+          

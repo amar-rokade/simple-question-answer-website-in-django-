@@ -1,0 +1,188 @@
+{% extends "base.html" %} {% load ask_questions_tags %} {% block content %}
+<div id="ask_page">
+  <br /><br /><br />
+  {% for answer in answer_list %}
+  <!-- question comment modal start  -->
+  <div
+    id="question_comment_modal"
+    class="modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalScrollableTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title ask_comment_title">question comments</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <!-- changable list modal -->
+        <div class="modal-body" id="q_comment_body">
+          <!-- here comment list comming -->
+          <div class="ask_comment_spinner" style="text-align: center">
+            <div class="spinner-grow text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <div class="question_commentlist_modal"></div>
+          <br /><br /><br /><br /><br />
+        </div>
+        <!-- question comment form  -->
+        <div class="modal-footer">
+          <form
+            class="question_comment_form"
+            data-catid="{{question.id}}"
+            answer_or_question=""
+          >
+            <div class="row">
+              <div class="col-10">
+                <input
+                  class="ask_comment_text form-control"
+                  type="text"
+                  maxlength="500"
+                />
+                <br />
+              </div>
+              <div class="col-7">
+                left <span class="ask_comment_text_left"></span>
+              </div>
+              <div class="col-5">
+                <input class="btn btn-info" type="submit" value="add comment" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- quest comment modal end -->
+  <div class="questions">
+    <div class="container">
+      <span>
+        <img
+          height="20"
+          width="20"
+          class="rounded-circle"
+          src="https://as1.ftcdn.net/jpg/03/46/83/96/500_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"
+          alt=""
+        />
+      </span>
+      <span
+        type="button"
+        class="post_author"
+        data-catid="{{answer.author.id}}"
+        class="font-weight-bolder"
+        >{{ answer.author }}</span
+      >
+      <span class="font-weight-lighter" style="font-size: small" id="post_date">
+        | {{ answer.post_on }}</span
+      ><br />
+      <div class="text-center">{{ answer.answer_text|safe }}</div>
+    </div>
+  </div>
+  <div
+    style="background-color: #dcf2f5; font-size: small; text-align: center"
+    class="container"
+  >
+    <!-- answer vote  -->
+    <ul class="nav nav-pills nav-justified">
+      <li class="nav-item">
+        {% answer_upvote answer.id request.user as answer_upvote %}
+        <div style="padding-top: 10px">
+          <a
+            class="answer_vote"
+            type="button"
+            vote-type="upvote"
+            answer_id="{{answer.id}}"
+          >
+            {% if answer_upvote.2 %}
+            <img
+              class="answer_upvote_class{{answer.id}}"
+              height="20px"
+              src="/static/img/profile/upvoted.png"
+              alt="upvote"
+            />
+            {% else %}
+            <img
+              class="answer_upvote_class{{answer.id}}"
+              height="20px"
+              src="/static/img/profile/upvote.png"
+              alt="upvote"
+            />
+            {% endif %}
+          </a>
+          <!-- upvote return first value from tmplate tag as upvote counts -->
+          <span
+            class="answer_upvote_count{{answer.id}}"
+            style="margin-left: 0%"
+          >
+            {{answer_upvote.0}}
+          </span>
+        </div>
+      </li>
+      <li class="nav-item">
+        <div style="padding-top: 10px">
+          <span
+            class="answer_vote"
+            type="button"
+            vote-type="downvote"
+            answer_id="{{answer.id}}"
+          >
+            {% if answer_upvote.3 %}
+            <img
+              class="answer_downvote_class{{answer.id}}"
+              height="20px"
+              src="/static/img/profile/downvoted.png"
+              alt="downvote"
+            />
+            {% else %}
+            <img
+              class="answer_downvote_class{{answer.id}}"
+              height="20px"
+              src="/static/img/profile/downvote.png"
+              alt="downvote"
+            />
+            {% endif %}
+          </span>
+          <!-- upvote return second value from tmplate tag as downvote counts -->
+          <span class="answer_downvote_count{{answer.id}}">
+            {{answer_upvote.1}}
+          </span>
+        </div>
+      </li>
+      <li class="nav-item">
+        <div style="padding-top: 10px">
+          <div
+            class="answer_comment"
+            type="button"
+            answer_id="{{answer.id}}"
+            method="GET"
+            class="col"
+          >
+            comment
+            <span class="answer_comment_count{{answer.id}}"
+              >{{ answer.comments.count }}</span
+            >
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <br />
+  <br />
+  {% empty %}
+  <div style="text-align: center">
+    You don't have any answers. Give questions answers !
+  </div>
+  {% endfor %}
+  <input type="hidden" class="csrf_value" value="{{csrf_token}}" />
+</div>
+{% endblock %}

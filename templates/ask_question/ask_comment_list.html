@@ -1,0 +1,20 @@
+{% for comment in post.comments.all %}
+<div>
+  <span
+    ><img
+      id="profile_img"
+      height="30px"
+      width="30px"
+      src="https://as1.ftcdn.net/jpg/03/46/83/96/500_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"
+  /></span>
+  <span class="post_author" data-catid="{{comment.author.profile.id}}"
+    >{{ comment.author }}</span
+  >
+  <span id="post_date"> | <small>{{ comment.post_on }}</small></span>
+  <div>
+    <p id="add_comment_id"><small>{{ comment.add_comment }}</small></p>
+  </div>
+</div>
+{% empty %}
+<p class="font-weight-bolder">No comments here yet :(</p>
+{% endfor %}

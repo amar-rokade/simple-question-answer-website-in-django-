@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% load ask_questions_tags %}
+{% block content %}
+{% if request.user.is_authenticated %}
+    <header class="masthead">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-8 col-md-10 mx-auto">
+                  <div class="site-heading">
+                      <ul style="font-size:small;color:white" class="nav navbar-dark bg-dark justify-content-center">
+                          <li class="nav-item">
+                            <a id="recently_asked" type="button" class="nav-link menuname" >recently asked</a>
+                          </li>
+                          <li class="nav-item">
+                            <a  type="button" class="nav-link menuname" href="{% url 'ask_questions:ask' %}" >
+                              <span style="color: white;">Ask</span>
+                            </a>                          
+                          </li>
+                          <li class="nav-item">
+                            <a id="my_asked" data-catid="{{request.user.id}}" type="button" class="nav-link menuname" >My asked</a>
+                          </li>
+                          <li class="nav-item">
+                              <a id="my_answers" data-catid="{{request.user.id}}" type="button" class="nav-link menuname" >answer</a>
+                            </li>
+                        </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </header>
+    {% endif %}
+<br>
+<input type="hidden" class="csrf_value" value="{{csrf_token}}">
+
+<br>
+<div id="ask_page" class="container" style="text-align: center;max-width: 500px;">
+    {% if post %}
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Well done!</h4>
+        <p>Aww yeah, you successfully posted the Blog! <br>
+          We will notify when someone give answer to your question</p>
+        <hr>
+        <p class="mb-0"><span class="go_to_qustionslist">Go To your Question List</span></p>
+      </div>
+    {% else %}
+    <form  method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-danger" type="submit" value='Post'>
+    </form>
+    {% endif %}
+</div>
+<script src="/static/js/ask_event.js"></script>
+     
+{% endblock %}
+<!-- ============ -->

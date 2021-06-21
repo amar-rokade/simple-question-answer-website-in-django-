@@ -1,0 +1,174 @@
+{% extends "base.html" %} {% load ask_questions_tags %} {% block content %}
+<br /><br /><br />
+<div id="ask_page">
+  <!-- question comment modal start  -->
+  <div
+    id="question_comment_modal"
+    class="modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalScrollableTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title ask_comment_title">question comments</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <!-- changable list modal -->
+        <div class="modal-body" id="q_comment_body">
+          <!-- here comment list comming -->
+          <div class="ask_comment_spinner" style="text-align: center">
+            <div class="spinner-grow text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <div class="question_commentlist_modal"></div>
+          <br /><br /><br /><br /><br />
+        </div>
+        <!-- question comment form  -->
+        <div class="modal-footer">
+          <form
+            class="question_comment_form"
+            data-catid="{{question.id}}"
+            answer_or_question=""
+          >
+            <div class="row">
+              <div class="col-10">
+                <input
+                  class="ask_comment_text form-control"
+                  type="text"
+                  maxlength="500"
+                />
+                <br />
+              </div>
+              <div class="col-7">
+                left <span class="ask_comment_text_left"></span>
+              </div>
+              <div class="col-5">
+                <input class="btn btn-info" type="submit" value="add comment" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- quest comment modal end -->
+  {% for ask in askquestion_list %}
+  <div class="questions container">
+    <span class="post_author btn" data-catid="{{ask.author.id}}">
+      <img
+        height="20"
+        width="20"
+        class="rounded-circle"
+        src="https://as1.ftcdn.net/jpg/03/46/83/96/500_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg"
+        alt=""
+      />
+    </span>
+    <span class="font-weight-bolder">{{ ask.author }}</span>
+    <span class="font-weight-lighter" style="font-size: small" id="post_date">
+      | {{ ask.post_on }}</span
+    ><br />
+    <div class="font-weight-bolder text-center">{{ ask }}</div>
+  </div>
+  <div
+    style="background-color: #dcf2f5; font-size: small; padding-bottom: 5px"
+    class="text-center container"
+  >
+    <ul class="nav nav-pills nav-justified">
+      <li class="nav-item">
+        {% question_upvote ask.id request.user as question_upvote %}
+        <a
+          class="question_vote"
+          type="button"
+          vote-type="upvote"
+          question_id="{{ask.id}}"
+        >
+          {% if question_upvote.2 %}
+          <img
+            class="question_upvote_class{{ask.id}}"
+            height="20px"
+            src="/static/img/profile/upvoted.png"
+            alt="upvote"
+          />
+          {% else %}
+          <img
+            class="question_upvote_class{{ask.id}}"
+            height="20px"
+            src="/static/img/profile/upvote.png"
+            alt="upvote"
+          />
+          {% endif %}
+        </a>
+        <!-- upvote return first value from tmplate tag as upvote counts -->
+        <span class="question_upvote_count{{ask.id}}" style="margin-left: 0%">
+          {{question_upvote.0}}
+        </span>
+      </li>
+      <li class="nav-item">
+        <span
+          class="question_vote"
+          type="button"
+          vote-type="downvote"
+          question_id="{{ask.id}}"
+        >
+          {% if question_upvote.3 %}
+          <img
+            class="question_downvote_class{{ask.id}}"
+            height="20px"
+            src="/static/img/profile/downvoted.png"
+            alt="downvote"
+          />
+          {% else %}
+          <img
+            class="question_downvote_class{{ask.id}}"
+            height="20px"
+            src="/static/img/profile/downvote.png"
+            alt="downvote"
+          />
+          {% endif %}
+        </span>
+        <span class="question_downvote_count{{ask.id}}">
+          {{question_upvote.1}}
+        </span>
+      </li>
+      <li class="nav-item">
+        <a
+          class="question_comment"
+          method="GET"
+          question_id="{{ask.id}}"
+          type="button"
+        >
+          <span style="color: black; font-size: small"
+            >comment
+            <span class="question_comment_count{{ask.id}}"
+              >{{ask.comments.all.count}}</span
+            >
+          </span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="{% url 'ask_questions:answers'  pk=ask.id slug=ask.slug %}#answers_all_id"
+        >
+          <span style="color: black">answers {{ ask.answers.count }}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  {% empty %}
+  <div style="font-size: small">NO ONE ASKED QUETIONS TILL...!</div>
+  {% endfor %}
+</div>
+<input type="hidden" class="csrf_value" value="{{csrf_token}}" />
+<script type="text/javascript" src="/static/js/ask_event.js"></script>
+{% endblock %}

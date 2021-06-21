@@ -1,0 +1,49 @@
+
+.table_border{
+    border-bottom:1px solid black;
+}
+#post_date{
+    font-size:o.2rem;
+}
+#edit_pen{
+   margin-left: - 80%;
+}
+#new_post{
+ 
+  padding-top:2px;
+  
+}
+#post_info{
+ padding-top:5px;
+ padding-left: 7px;
+ padding-top: 5px;
+}
+
+#post_image{
+margin-bottom: 5px;
+}
+
+#text_content{
+border-bottom:1px solid #f0f0f0;
+ padding-bottom:15px;
+}
+
+#post_bottom{
+ padding-top: 5px;
+ padding-bottom:5px;
+}
+
+
+#comment_form{
+  padding-top: 10px;
+}
+#add_comment_id{
+  margin-left:5%;
+}
+
+#edit_comment{
+  padding-left: 50%;
+}
+#profile_img{
+border-radius: 50%;
+}
